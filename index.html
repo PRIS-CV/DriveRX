@@ -1,93 +1,853 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DriveRX - Cross-Task Autonomous Driving</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f5f5f5;
-      margin: 0;
-      padding: 0;
+  <meta charset="utf-8">
+  <meta name="description" content="DriveRX: A Vision-Language Reasoning Model for Cross-Task Autonomous Driving">
+  <meta name="keywords" content="DriveRX, AutoDriveRL, Autonomous Driving">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DriveRX</title>
+  <link rel="icon" href="./static/images/driverx_icon.png">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
     }
-    header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
-    }
-    h1 {
-      margin-top: 20px;
-    }
-    .logo {
-      width: 150px;
-      margin-top: 20px;
-    }
-    .content {
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    footer {
-      margin-top: 20px;
-      font-size: 0.9em;
-      color: #777;
-    }
-    pre {
-      text-align: left;
-      background-color: #f0f0f0;
-      padding: 10px;
-      border-radius: 5px;
-      overflow-x: auto;
-    }
-    a {
-      color: #007acc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+    gtag('js', new Date());
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/leaderboard.css">
+  <!-- Favicon -->
+  <link rel="icon" href="./static/images/driverx_icon.png">
+  <!-- JS Files -->
+  <script type="text/javascript" src="./static/js/sort-table.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/leaderboard.js"></script>  
+  <script src="./static/js/leaderboard_button.js"></script>
 </head>
 <body>
+<!-- Navigation -->
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+</nav>
 
-<header>
-  <h1>DriveRX: Vision-Language Reasoning for Autonomous Driving</h1>
-</header>
+<!-- Title, Authors, and Links -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <!-- Main Title -->
+          <h1 class="title is-1 publication-title">
+            <img src="static/images/driverx_icon.png" style="width:1em; vertical-align: middle" alt="Logo"/> 
+            <span class="driverx" style="vertical-align: middle">DriveRX</span>            
+          </h1>
+          <!-- Subtitle -->
+          <h2 class="subtitle is-3 publication-subtitle">
+            A Vision-Language Reasoning Model for Cross-Task Autonomous Driving<br>
+            The AutoDriveRL Framework and Multi-Task Collaborative Optimization
+          </h2>
+          <!-- Authors -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Muxi Diao*<sup style="color:#4B70F5;"><b>1,</b></sup><sup style="color:#FF8F00;"><b>3</b></sup></a>,
+            </span>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Lele Yang*<sup style="color:#4B70F5;"><b>1</b></sup></a>,
+            </span>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Hongbo Yin<sup style="color:#06D001;"><b>2,</b></sup><sup style="color:#FF8F00;"><b>3</b></sup></a>,
+            </span>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Zhexu Wang<sup style="color:#4B70F5;"><b>1</b></sup></a>,
+            </span>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Yejie Wang<sup style="color:#4B70F5;"><b>1</b></sup></a>,
+            </span><br>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Daxin Tian<sup style="color:#06D001;"><b>2,</b></sup><sup style="color:#FF8F00;"><b>3</b></sup></a>,
+            </span>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Kongming Liang<sup style="color:#4B70F5;"><b>1</b></sup></a>,
+            </span>
+            <span class="author-block">
+              <a href="index.html" style="text-decoration: none; color: inherit;">Zhanyu Ma<sup style="color:#4B70F5;"><b>1</b></sup></a>,
+            </span>
+          </div>
+          
+          <!-- Affiliations -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup style="color:#4B70F5;"><b>1</b></sup>Beijing University of Posts and Telecommunications,</span>
+            <span class="author-block"><sup style="color:#06D001;"><b>2</b></sup>Zhongguancun Academy,</span>
+            <span class="author-block"><sup style="color:#FF8F00;"><b>3</b></sup>Beihang University</span>
+          </div>
+          
+          <br>
+          <!-- Equal Contribution -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">*Equal contribution</span><br>
+            <span class="author-block">†Corresponding author</span>
+          </div>
+          <!-- Links -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- arXiv Link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2505.20665"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link -->
+              <span class="link-block">
+                <a href="https://github.com/PRIS-CV/AutoDriveRL"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <!-- Dataset Link -->
+              <span class="link-block">
+                <a href="https://github.com/PRIS-CV/DriveRX"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <p style="font-size:18px;">🤗</p>
+                  </span>
+                  <span>Dataset</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="content">
-  <h2>Welcome to the DriveRX Project!</h2>
-  <p>DriveRX is a cutting-edge Vision-Language Reasoning Model, built to address cross-task challenges in autonomous driving with enhanced reasoning capabilities.</p>
-  <p>We are preparing to open-source the full project here:</p>
-  <p><a href="https://github.com/PRIS-CV/AutoDriveRL" target="_blank">🔗 GitHub Repository: PRIS-CV/AutoDriveRL</a></p>
-  <ul style="text-align:left; display: inline-block;">
-    <li>📚 Complete codebase for DriveRX</li>
-    <li>🗂️ Curated datasets for training and evaluation</li>
-    <li>🧠 Pre-trained model weights</li>
-    <li>📖 Comprehensive documentation and tutorials</li>
-  </ul>
-  <p>Our mission is to push the boundaries of autonomous driving by combining vision, language, and structured reasoning.</p>
-  
-  <h3>If you find this work useful, please cite:</h3>
-  <pre>
-@misc{diao2025driverxvisionlanguagereasoningmodel,
-      title={DriveRX: A Vision-Language Reasoning Model for Cross-Task Autonomous Driving}, 
-      author={Muxi Diao and Lele Yang and Hongbo Yin and Zhexu Wang and Yejie Wang and Daxin Tian and Kongming Liang and Zhanyu Ma},
-      year={2025},
-      eprint={2505.20665},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2505.20665}, 
-}
-  </pre>
-</div>
+<!-- Main Content -->
+<section class="section is-small">
+  <div class="container">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Research Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            Autonomous driving systems require real-time reasoning across perception, prediction, planning, and behavior in dynamic environments. Conventional models struggle with generalization, while existing vision-language models are limited by isolated modules. Our DriveRX model, trained in the AutoDriveRL framework, addresses these issues by breaking down autonomous driving into four structured subtasks—Perception, Prediction, Planning, and Behavior—each optimized with task-specific reward models.
+          </p>
+          <p>
+            Core innovations of AutoDriveRL and DriveRX include:<br>
+            <b>(1) Structured Reasoning Chain</b>: Decomposing driving into four VQA-style tasks.<br>
+            <b>(2) Reinforcement Learning Optimization</b>: Using the GRPO algorithm for collaborative optimization.<br>
+            <b>(3) Real-time Reasoning Optimization</b>: Implementing reward-guided reasoning compression.
+          </p>
+          <p>
+            On DriveBench, DriveRX shows significant advantages:<br>
+            • Behavior task score of 62.02, surpassing GPT-4o by 6.98 points<br>
+            • 78.63 accuracy in Planning task<br>
+            • Superior performance in perception and prediction tasks
+          </p>
+          <p>
+            We've open-sourced AutoDriveRL and DriveRX to support autonomous driving research, providing a new paradigm for multi-task reasoning and advancing safer, more transparent autonomous systems.
+          </p>
+        </div>
+        <br><br>
+      </div>
+    </div>
+  </div>
+</section>
 
-<footer>
-  &copy; 2025 PRIS-CV. All rights reserved. Visit our GitHub at <a href="https://github.com/PRIS-CV/AutoDriveRL" target="_blank">PRIS-CV/AutoDriveRL</a>.
+
+<!-- Framework Section -->
+<section class="hero is-light is-small mb-0">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 driverx">
+      <img src="static/images/driverx_icon.png" style="width:1em;vertical-align: middle" alt="Logo"/>
+      <span class="driverx" style="vertical-align: middle">AutoDriveRL Framework</span>
+    </h1>
+  </div>
+</section>
+
+<!-- DriveRX Overview -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+        <div class="content has-text-centered">
+          <img src="static/images/fig1_framework.png" width="100%"/>
+          <p>
+            Overview of the AutoDriveRL framework. 
+            The left diagram shows the structured reasoning chain decomposing autonomous driving into four core tasks, 
+            and the right diagram illustrates the reinforcement learning training pipeline.
+          </p>
+        </div>
+    </div>
+  </div>
+</section>
+
+<!-- Framework Details -->
+<section>
+  <div class="container">
+    <div class="columns is-centered has-text-centered m-6">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" id="framework">Framework Design</h2>
+        <div class="content has-text-justified">
+          <p>
+            AutoDriveRL overcomes the limitations of traditional end-to-end models and achieves interpretable, cross-task reasoning optimization through task decomposition and reinforcement learning.
+          </p>
+          <p>
+            <b>(1) Task Formalization</b>:<br>
+            Autonomous driving is broken down into four core subtasks—Perception (identifying scene elements), Prediction (anticipating dynamic agent behaviors), Planning (determining path or directional actions), and Behavior (conducting behavior prediction and strategy selection). Each subtask is modeled as a visual question-answering (VQA) problem, with inputs being scene images and task-specific natural language queries, and outputs being interpretable decision responses. The tasks are implicitly coupled through a shared semantic space rather than explicit output dependencies.
+          </p>
+          <p>
+            <b>(2) Data Construction</b>:<br>
+            6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling.
+          </p>
+          <p>
+            <b>(3) Reward Model Design</b>:<br>
+            A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- <section>
+  <div class="container">
+    <div class="columns is-centered has-text-centered m-6">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Evaluation Metrics</h2>
+        <div class="content has-text-justified">
+          <p>
+            To comprehensively assess the model's reasoning capabilities in autonomous driving scenarios, we adopt a multi-dimensional evaluation system:
+            <b>1. Task Accuracy</b>: GPT scores for Perception, Prediction, Planning, and Behavior tasks in clean scenarios and 15 visual degradation scenarios.
+            <b>2. Reasoning Efficiency</b>: Measuring model response time and output token length to evaluate real-time performance.
+            <b>3. Cross-Task Consistency</b>: Analyzing the consistency of semantic representations across multi-task reasoning, measured by KL divergence for inter-task knowledge transfer.
+            <b>4. Extreme Scenario Robustness</b>: Evaluating model generalization on the DriveLM-Hard subset (including high-density traffic, rare behaviors, etc.).
+          </p>
+          <div id="metrics-carousel" class="carousel results-carousel">
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/fig5_metrics.png" width="100%"/>
+                <p> Task accuracy comparison (GPT scores) of different models in clean scenarios.
+                </p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/fig6_robustness.png" width="90%"/>
+                <p> Robustness performance under visual degradations (taking the Behavior task as an example).
+                </p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/fig7_inference_time.png" width="90%"/>
+                <p> Model inference time vs. output length comparison: DriveRX achieves the fastest response while ensuring accuracy.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!-- Experimental Results -->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1">Experimental Results</h1>
+  </div>
+</section>
+
+<!-- Leaderboard -->
+<!-- <section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full has-text-centered content">
+        <h2 class="title is-3" id="leaderboard">DriveBench Benchmark Performance</h2>
+        <div class="content">
+          <p class="mt-3">GPT score results on the DriveBench test set (19,200 frames), including clean and visually degraded scenarios.</p>
+          <table id="table1" class="js-sort-table">
+            <tr>
+              <td class="js-sort-number"><strong>#</strong></td>
+              <td class="js-sort"><strong>Model</strong></td>
+              <td class="js-sort"><strong>Source</strong></td>
+              <td class="js-sort-date"><strong>Date</strong></td>
+              <td class="js-sort-number"><strong>Perception</strong></td>
+              <td class="js-sort-number"><strong>Prediction</strong></td>
+              <td class="js-sort-number"><strong>Planning</strong></td>
+              <td class="js-sort-number"><strong>Behavior</strong></td>
+              <td class="js-sort-number"><strong>Average</strong></td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td><b>DriveRX 🏆</b></td>
+              <td><a href="https://pris-cv.github.io/DriveRX/" class="ext-link" style="font-size: 16px;">Official</a></td>
+              <td>2025-05</td>
+              <td><b>32.88</b></td>
+              <td><b>52.20</b></td>
+              <td><b>78.63</b></td>
+              <td><b>62.02</b></td>
+              <td><b>56.93</b></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><b>GPT-4o</b></td>
+              <td><a href="https://openai.com/index/hello-gpt-4o/" class="ext-link" style="font-size: 16px;">OpenAI</a></td>
+              <td>2024-08</td>
+              <td>41.51</td>
+              <td>50.92</td>
+              <td>84.82</td>
+              <td>55.04</td>
+              <td>58.07</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><b>Qwen2.5-VL 72B</b></td>
+              <td><a href="https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct" class="ext-link" style="font-size: 16px;">Hugging Face</a></td>
+              <td>2025-02</td>
+              <td>37.56</td>
+              <td>50.47</td>
+              <td>77.18</td>
+              <td>55.57</td>
+              <td>55.19</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><b>InternVL3 78B</b></td>
+              <td><a href="https://huggingface.co/OpenGVLab/InternVL3-78B" class="ext-link" style="font-size: 16px;">OpenGVLab</a></td>
+              <td>2025-04</td>
+              <td>39.44</td>
+              <td>49.71</td>
+              <td>82.24</td>
+              <td>50.73</td>
+              <td>55.53</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><b>MM-Eureka 7B</b></td>
+              <td><a href="https://huggingface.co/lmms-lab/MM-Eureka-7B" class="ext-link" style="font-size: 16px;">LMMS</a></td>
+              <td>2025-03</td>
+              <td>34.44</td>
+              <td>41.72</td>
+              <td>65.38</td>
+              <td>49.40</td>
+              <td>47.74</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><b>DriveLM 7B</b></td>
+              <td><a href="https://huggingface.co/OpenDriveLab/DriveLM" class="ext-link" style="font-size: 16px;">OpenDriveLab</a></td>
+              <td>2024-06</td>
+              <td>16.85</td>
+              <td>39.71</td>
+              <td>68.71</td>
+              <td>42.78</td>
+              <td>42.06</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><b>LLaVA-1.5 7B</b></td>
+              <td><a href="https://huggingface.co/liuhaotian/llava-v1.5-7b" class="ext-link" style="font-size: 16px;">LLaVA</a></td>
+              <td>2024-03</td>
+              <td>23.22</td>
+              <td>17.54</td>
+              <td>29.15</td>
+              <td>13.60</td>
+              <td>20.88</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full has-text-centered content">
+        <h2 class="title is-3" id="leaderboard">DriveBench Benchmark Performance</h2>
+        <div class="content">
+          <p class="mt-3">GPT score results on the DriveBench test set, including clean and visually degraded scenarios.</p>
+          <table id="table1" class="js-sort-table">
+            <thead>
+              <tr style="background-color: #ddd; border-bottom: 2px solid #ddd;">
+                <th style="padding: 8px; text-align: left; color: #000;">#</th>
+                <th style="padding: 8px; text-align: left; color: #000;">🏆 Model</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Size</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Type</th>
+                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">👁️ Perception</th>
+                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">🔮 Prediction</th>
+                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">⚙️ Planning</th>
+                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">🤖 Behavior</th>
+              </tr>
+              <tr style="background-color: #f0f0f0; border-bottom: 1px solid #ddd;">
+                <th style="padding: 8px; text-align: center; color: #000;"></th>
+                <th style="padding: 8px; text-align: left; color: #000;"></th>
+                <th style="padding: 8px; text-align: center; color: #000;"></th>
+                <th style="padding: 8px; text-align: center; color: #000;"></th>
+                <th style="padding: 8px; text-align: center; color: #000;">Clean</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Corr.</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Clean</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Corr.</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Clean</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Corr.</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Clean</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Corr.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px; text-align: center;">1</td>
+                <td style="padding: 8px; text-align: left;"><strong>DriveRX 🏆</strong></td>
+                <td style="padding: 8px; text-align: center;">8 B</td>
+                <td style="padding: 8px; text-align: center;">Reasoning</td>
+                <td style="padding: 8px; text-align: center;">32.88</td>
+                <td style="padding: 8px; text-align: center;"><strong>29.92</strong></td>
+                <td style="padding: 8px; text-align: center;">52.20</td>
+                <td style="padding: 8px; text-align: center;"><strong>48.29</strong></td>
+                <td style="padding: 8px; text-align: center;">78.63</td>
+                <td style="padding: 8px; text-align: center;"><strong>75.53</strong></td>
+                <td style="padding: 8px; text-align: center;">62.02</td>
+                <td style="padding: 8px; text-align: center;"><strong>55.24</strong></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">2</td>
+                <td style="padding: 8px; text-align: left;"><strong>GPT-4o</strong></td>
+                <td style="padding: 8px; text-align: center;">-</td>
+                <td style="padding: 8px; text-align: center;">Commercial</td>
+                <td style="padding: 8px; text-align: center;">41.51</td>
+                <td style="padding: 8px; text-align: center;">45.39</td>
+                <td style="padding: 8px; text-align: center;">52.28</td>
+                <td style="padding: 8px; text-align: center;">50.92</td>
+                <td style="padding: 8px; text-align: center;">84.82</td>
+                <td style="padding: 8px; text-align: center;">84.43</td>
+                <td style="padding: 8px; text-align: center;">55.04</td>
+                <td style="padding: 8px; text-align: center;">53.97</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">3</td>
+                <td style="padding: 8px; text-align: left;"><strong>Qwen2.5-VL</strong></td>
+                <td style="padding: 8px; text-align: center;">72 B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;">37.56</td>
+                <td style="padding: 8px; text-align: center;">32.25</td>
+                <td style="padding: 8px; text-align: center;"><strong>54.89</strong></td>
+                <td style="padding: 8px; text-align: center;">50.47</td>
+                <td style="padding: 8px; text-align: center;">77.18</td>
+                <td style="padding: 8px; text-align: center;">74.01</td>
+                <td style="padding: 8px; text-align: center;">55.57</td>
+                <td style="padding: 8px; text-align: center;">51.65</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">4</td>
+                <td style="padding: 8px; text-align: left;"><strong>InternVL3</strong></td>
+                <td style="padding: 8px; text-align: center;">78 B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;"><strong>39.44</strong></td>
+                <td style="padding: 8px; text-align: center;">35.62</td>
+                <td style="padding: 8px; text-align: center;">50.93</td>
+                <td style="padding: 8px; text-align: center;">49.71</td>
+                <td style="padding: 8px; text-align: center;"><strong>82.24</strong></td>
+                <td style="padding: 8px; text-align: center;">78.41</td>
+                <td style="padding: 8px; text-align: center;">50.73</td>
+                <td style="padding: 8px; text-align: center;">52.03</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">5</td>
+                <td style="padding: 8px; text-align: left;"><strong>MM-Eureka</strong></td>
+                <td style="padding: 8px; text-align: center;">7 B</td>
+                <td style="padding: 8px; text-align: center;">Reasoning</td>
+                <td style="padding: 8px; text-align: center;">34.44</td>
+                <td style="padding: 8px; text-align: center;">28.92</td>
+                <td style="padding: 8px; text-align: center;">40.31</td>
+                <td style="padding: 8px; text-align: center;">41.72</td>
+                <td style="padding: 8px; text-align: center;">65.38</td>
+                <td style="padding: 8px; text-align: center;">60.18</td>
+                <td style="padding: 8px; text-align: center;">49.40</td>
+                <td style="padding: 8px; text-align: center;">47.59</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">6</td>
+                <td style="padding: 8px; text-align: left;"><strong>DriveLM</strong></td>
+                <td style="padding: 8px; text-align: center;">7 B</td>
+                <td style="padding: 8px; text-align: center;">Specialist</td>
+                <td style="padding: 8px; text-align: center;">16.85</td>
+                <td style="padding: 8px; text-align: center;">16.00</td>
+                <td style="padding: 8px; text-align: center;">44.33</td>
+                <td style="padding: 8px; text-align: center;">39.71</td>
+                <td style="padding: 8px; text-align: center;">68.71</td>
+                <td style="padding: 8px; text-align: center;">67.60</td>
+                <td style="padding: 8px; text-align: center;">42.78</td>
+                <td style="padding: 8px; text-align: center;">40.37</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">7</td>
+                <td style="padding: 8px; text-align: left;"><strong>LLaVA-1.5</strong></td>
+                <td style="padding: 8px; text-align: center;">7 B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;">23.22</td>
+                <td style="padding: 8px; text-align: center;">22.95</td>
+                <td style="padding: 8px; text-align: center;">22.02</td>
+                <td style="padding: 8px; text-align: center;">17.54</td>
+                <td style="padding: 8px; text-align: center;">29.15</td>
+                <td style="padding: 8px; text-align: center;">31.51</td>
+                <td style="padding: 8px; text-align: center;">13.60</td>
+                <td style="padding: 8px; text-align: center;">13.62</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-full has-text-centered content">
+        <h2 class="title is-3" id="leaderboard">DriveLM-Hard Benchmark Performance</h2>
+        <div class="content">
+          <p class="mt-3">Evaluations of VLMs across different driving tasks on DriveLM-Hard. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task in bold.</p>
+          <table id="table1" class="js-sort-table">
+            <thead>
+              <tr style="background-color: #ddd; border-bottom: 2px solid #ddd;">
+                <th style="padding: 8px; text-align: center; color: #000;">#</th>
+                <th style="padding: 8px; text-align: left; color: #000;">🏆 Model</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Size</th>
+                <th style="padding: 8px; text-align: center; color: #000;">Type</th>
+                <th style="padding: 8px; text-align: center; color: #000;">👁️ Perception</th>
+                <th style="padding: 8px; text-align: center; color: #000;">🔮 Prediction</th>
+                <th style="padding: 8px; text-align: center; color: #000;">⚙️ Planning</th>
+                <th style="padding: 8px; text-align: center; color: #000;">🤖 Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px; text-align: center;">1</td>
+                <td style="padding: 8px; text-align: left;"><strong>DriveRX 🏆</strong></td>
+                <td style="padding: 8px; text-align: center;">8B</td>
+                <td style="padding: 8px; text-align: center;">Reasoning</td>
+                <td style="padding: 8px; text-align: center;"><strong>34.83</strong></td>
+                <td style="padding: 8px; text-align: center;"><strong>71.84</strong></td>
+                <td style="padding: 8px; text-align: center;"><strong>51.42</strong></td>
+                <td style="padding: 8px; text-align: center;">36.82</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">2</td>
+                <td style="padding: 8px; text-align: left;"><strong>GPT-4o</strong></td>
+                <td style="padding: 8px; text-align: center;">-</td>
+                <td style="padding: 8px; text-align: center;">Commercial</td>
+                <td style="padding: 8px; text-align: center;">36.12</td>
+                <td style="padding: 8px; text-align: center;">65.90</td>
+                <td style="padding: 8px; text-align: center;">51.42</td>
+                <td style="padding: 8px; text-align: center;">42.00</td>
+              </tr>
+              <!-- <tr>
+                <td style="padding: 8px; text-align: center;">2</td>
+                <td style="padding: 8px; text-align: left;"><strong>Qwen2.5-VL</strong></td>
+                <td style="padding: 8px; text-align: center;">7B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;">26.10</td>
+                <td style="padding: 8px; text-align: center;">60.13</td>
+                <td style="padding: 8px; text-align: center;">32.41</td>
+                <td style="padding: 8px; text-align: center;">19.86</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">3</td>
+                <td style="padding: 8px; text-align: left;"><strong>InternVL3</strong></td>
+                <td style="padding: 8px; text-align: center;">8B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;">31.29</td>
+                <td style="padding: 8px; text-align: center;">38.95</td>
+                <td style="padding: 8px; text-align: center;">31.78</td>
+                <td style="padding: 8px; text-align: center;">30.48</td>
+              </tr> -->
+              <tr>
+                <td style="padding: 8px; text-align: center;">3</td>
+                <td style="padding: 8px; text-align: left;"><strong>Qwen2.5-VL</strong></td>
+                <td style="padding: 8px; text-align: center;">72B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;">32.49</td>
+                <td style="padding: 8px; text-align: center;">58.63</td>
+                <td style="padding: 8px; text-align: center;"><strong>50.55</strong></td>
+                <td style="padding: 8px; text-align: center;"><strong>40.02</strong></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">4</td>
+                <td style="padding: 8px; text-align: left;"><strong>InternVL3</strong></td>
+                <td style="padding: 8px; text-align: center;">78B</td>
+                <td style="padding: 8px; text-align: center;">Open</td>
+                <td style="padding: 8px; text-align: center;"><strong>32.98</strong></td>
+                <td style="padding: 8px; text-align: center;">58.67</td>
+                <td style="padding: 8px; text-align: center;">45.82</td>
+                <td style="padding: 8px; text-align: center;">35.69</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">5</td>
+                <td style="padding: 8px; text-align: left;"><strong>MM-Eureka</strong></td>
+                <td style="padding: 8px; text-align: center;">7B</td>
+                <td style="padding: 8px; text-align: center;">Reasoning</td>
+                <td style="padding: 8px; text-align: center;">29.09</td>
+                <td style="padding: 8px; text-align: center;"><strong>67.41</strong></td>
+                <td style="padding: 8px; text-align: center;">29.67</td>
+                <td style="padding: 8px; text-align: center;">23.21</td>
+              </tr>
+              <!-- <tr>
+                <td style="padding: 8px; text-align: center;">7</td>
+                <td style="padding: 8px; text-align: left;">R1-Onevision<sup>[37]</sup></td>
+                <td style="padding: 8px; text-align: center;">7B</td>
+                <td style="padding: 8px; text-align: center;">Reasoning</td>
+                <td style="padding: 8px; text-align: center;">25.51</td>
+                <td style="padding: 8px; text-align: center;">46.60</td>
+                <td style="padding: 8px; text-align: center;">34.45</td>
+                <td style="padding: 8px; text-align: center;">29.03</td>
+              </tr> -->
+              <tr>
+                <td style="padding: 8px; text-align: center;">6</td>
+                <td style="padding: 8px; text-align: left;"><strong>Align-DS-V</strong></td>
+                <td style="padding: 8px; text-align: center;">8B</td>
+                <td style="padding: 8px; text-align: center;">Reasoning</td>
+                <td style="padding: 8px; text-align: center;">29.45</td>
+                <td style="padding: 8px; text-align: center;">52.90</td>
+                <td style="padding: 8px; text-align: center;">29.15</td>
+                <td style="padding: 8px; text-align: center;">32.48</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; text-align: center;">7</td>
+                <td style="padding: 8px; text-align: left;"><strong>DriveLM</strong></td>
+                <td style="padding: 8px; text-align: center;">7B</td>
+                <td style="padding: 8px; text-align: center;">Specialist</td>
+                <td style="padding: 8px; text-align: center;">28.78</td>
+                <td style="padding: 8px; text-align: center;">19.93</td>
+                <td style="padding: 8px; text-align: center;">22.60</td>
+                <td style="padding: 8px; text-align: center;">30.75</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>        
+  <div class="container">
+    <div class="columns is-centered has-text-centered m-6">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Other Findings</h2>
+        <div class="content has-text-justified">
+          <div id="analysis-carousel" class="carousel results-carousel">
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/fig8_training_dynamics.png" width="90%"/>
+                <p> Training dynamics: Perception/Prediction tasks converge early, while Planning/Behavior tasks optimize gradually.
+                </p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <table style="width:90%; border-collapse: collapse; margin: 0 auto;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid #000;">
+                      <th style="text-align: left; padding: 8px;">Model</th>
+                      <th style="text-align: center; padding: 8px;">Size</th>
+                      <th style="text-align: center; padding: 8px;">👁️ Vision Encoder</th>
+                      <th style="text-align: center; padding: 8px;">💬 Response Length</th>
+                      <th style="text-align: center; padding: 8px;">🖼️ Image Tokens</th>
+                      <th style="text-align: center; padding: 8px;">🧠 Perception</th>
+                      <th style="text-align: center; padding: 8px;">⏱️ Infer times</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">MM-Eureka</td>
+                      <td style="text-align: center; padding: 8px;">7B</td>
+                      <td style="text-align: center; padding: 8px;">Qwen-ViT-L/14 (Qwen2.5-VL)</td>
+                      <td style="text-align: right; padding: 8px;">543.12</td>
+                      <td style="text-align: right; padding: 8px;">1824</td>
+                      <td style="text-align: right; padding: 8px;">34.44</td>
+                      <td style="text-align: right; padding: 8px;">2.52</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">R1-Onevision</td>
+                      <td style="text-align: center; padding: 8px;">7B</td>
+                      <td style="text-align: center; padding: 8px;">Qwen-ViT-L/14 (Qwen2.5-VL)</td>
+                      <td style="text-align: right; padding: 8px;">447.55</td>
+                      <td style="text-align: right; padding: 8px;">1824</td>
+                      <td style="text-align: right; padding: 8px;">28.64</td>
+                      <td style="text-align: right; padding: 8px;">2.59</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">Qwen2.5-VL</td>
+                      <td style="text-align: center; padding: 8px;">7B</td>
+                      <td style="text-align: center; padding: 8px;">Qwen-ViT-L/14 (Qwen2.5-VL)</td>
+                      <td style="text-align: right; padding: 8px;">357.85</td>
+                      <td style="text-align: right; padding: 8px;">1824</td>
+                      <td style="text-align: right; padding: 8px;">31.92</td>
+                      <td style="text-align: right; padding: 8px;">2.76</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">Qwen2.5-VL</td>
+                      <td style="text-align: center; padding: 8px;">72B</td>
+                      <td style="text-align: center; padding: 8px;">Qwen-ViT-L/14 (Qwen2.5-VL)</td>
+                      <td style="text-align: right; padding: 8px;">343.27</td>
+                      <td style="text-align: right; padding: 8px;">1824</td>
+                      <td style="text-align: right; padding: 8px;">37.56</td>
+                      <td style="text-align: right; padding: 8px;">-</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">InternVL3</td>
+                      <td style="text-align: center; padding: 8px;">8B</td>
+                      <td style="text-align: center; padding: 8px;">InternViT-300M-448px-V2.5</td>
+                      <td style="text-align: right; padding: 8px;">270.94</td>
+                      <td style="text-align: right; padding: 8px;">2304</td>
+                      <td style="text-align: right; padding: 8px;">33.21</td>
+                      <td style="text-align: right; padding: 8px;">1.58</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">InternVL3</td>
+                      <td style="text-align: center; padding: 8px;">78B</td>
+                      <td style="text-align: center; padding: 8px;">InternViT-6B-448px-V2.5</td>
+                      <td style="text-align: right; padding: 8px;">275.69</td>
+                      <td style="text-align: right; padding: 8px;">2304</td>
+                      <td style="text-align: right; padding: 8px;"><strong>39.44</strong></td>
+                      <td style="text-align: right; padding: 8px;">-</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">DriveLM</td>
+                      <td style="text-align: center; padding: 8px;">7B</td>
+                      <td style="text-align: center; padding: 8px;">CLIP ViT-L/14</td>
+                      <td style="text-align: right; padding: 8px;"><strong>113.28</strong></td>
+                      <td style="text-align: right; padding: 8px;">576</td>
+                      <td style="text-align: right; padding: 8px;">16.85</td>
+                      <td style="text-align: right; padding: 8px;"><strong>0.59</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">Align-DS-V</td>
+                      <td style="text-align: center; padding: 8px;">8B</td>
+                      <td style="text-align: center; padding: 8px;">CLIP ViT-L/14</td>
+                      <td style="text-align: right; padding: 8px;">252.10</td>
+                      <td style="text-align: right; padding: 8px;">576</td>
+                      <td style="text-align: right; padding: 8px;">31.41</td>
+                      <td style="text-align: right; padding: 8px;">0.68</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">DriveRX</td>
+                      <td style="text-align: center; padding: 8px;">8B</td>
+                      <td style="text-align: center; padding: 8px;">CLIP ViT-L/14</td>
+                      <td style="text-align: right; padding: 8px;">363.44</td>
+                      <td style="text-align: right; padding: 8px;">576</td>
+                      <td style="text-align: right; padding: 8px;">32.88</td>
+                      <td style="text-align: right; padding: 8px;">1.06</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p style="margin-top: 10px;">Impact of different vision encoders on the perception task. We report DriveBench perception scores (higher is better), average response length (in tokens) per question, number of image tokens per image, and inference time per question (in seconds). For a fair comparison, inference time is reported only among models of the same size.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Case Studies -->
+<section>
+  <div class="container">
+    <div class="columns is-centered has-text-centered m-6">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" id="case-study">Case Studies</h2>
+        <div class="content has-text-justified">
+          <div id="case-carousel" class="carousel results-carousel">
+            <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+              <div class="content has-text-centered">
+                <img src="static/images/fig11_perception_case.png" width="80%"/>
+                <p> Perception case: DriveRX correctly identifies front vehicles, while DriveLM misidentifies a fire hydrant as a relevant object.
+                </p>
+              </div>
+            </div>
+            <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+              <div class="content has-text-centered">
+                <img src="static/images/fig12_prediction_case.png" width="80%"/>
+                <p> Prediction Case: Qwen2.5-VL-72B-Instruct incorrectly identified objects in the target area as road barriers, while DriveRX successfully pointed out there were no obvious obstacles in the image.
+                </p>
+              </div>
+            </div>
+            <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+              <div class="content has-text-centered">
+                <img src="static/images/fig13_planning_case.png" width="80%"/>
+                <p> Planning case: Align-DS-V suggests unnecessary slowing, while DriveRX judges to maintain speed based on the scene.
+                </p>
+              </div>
+            </div>
+            <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+              <div class="content has-text-centered">
+                <img src="static/images/fig14_behavior_case.png" width="80%"/>
+                <p> Behavior case: GPT-4o mispredicts a left turn, while DriveRX correctly predicts straight movement through structured reasoning.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BibTeX -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX Citation</h2>
+    <pre><code>@article{diao2025driverx,
+  title={DriveRX: A Vision-Language Reasoning Model for Cross-Task Autonomous Driving},
+  author={Diao, Muxi and Yang, Lele and Yin, Hongbo and Wang, Zhexu and Wang, Yejie and Tian, Daxin and Liang, Kongming and Ma, Zhanyu},
+  journal={arXiv preprint arXiv:2505.20665},
+  year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+          This website is built in a style similar to <a href="https://we-math.github.io/" target="_blank">We-Math</a>, based on the <a href="https://nerfies.github.io/" target="_blank">Nerfies</a> template and is licensed under a 
+          <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+      </div>
+    </div>
+  </div>
 </footer>
 
 </body>
