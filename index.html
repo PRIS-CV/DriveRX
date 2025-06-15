@@ -149,13 +149,11 @@
 <section class="hero is-light is-small mb-0">
   <div class="hero-body has-text-centered">
     <h1 class="title is-1 driverx">
-      <span class="driverx" style="vertical-align: middle">Overall</span>
+      <span class="driverx" style="vertical-align: middle">🌟 Overall</span>
     </h1>
   </div>
 </section>
 
-
-<!-- Main Content -->
 <section class="section is-small">
   <div class="container">
     <div class="columns is-centered has-text-centered">
@@ -163,30 +161,28 @@
         <div class="content has-text-justified">
           <p>
             <img src="static/images/fig3_task_decomposition.png" width="100%"/>
-            <p class="has-text-centered">Comparison of model responses before (left) and after (right) training with AutoDriveRL framework</p>
-            Previous VLMs exhibited several key shortcomings. They performed poorly across four critical autonomous driving tasks: <b>Perception, Prediction, Planning, and Behavior</b>. Additionally, their strong performance on other tasks was difficult to generalize to autonomous driving tasks. Also, the biased data distribution in the DriveLM and DriveBench datasets hindered generalization. Models trained on DriveLM often failed to generalize well, and DriveBench was unable to effectively evaluate model performance in scenarios requiring complex decisions.
+            <p class="has-text-centered">🔄 Comparison of model responses before (left) and after (right) training with AutoDriveRL framework</p>
+            <p>
+              🚗 <span style="color: #4a6baf;">Autonomous driving requires <b>real-time, robust reasoning</b> across 👀 perception, 🔮 prediction, 🗺️ planning, and 🤖 behavior.</span> However, conventional end-to-end models fail to generalize in complex scenarios due to <b>the lack of structured reasoning</b>. While recent vision-language models (VLMs) have been applied to driving tasks, they typically rely on <b>isolated modules and static supervision</b>, limiting their ability to support multi-stage decision-making.
+            </p>
+            <p>
+              ⚙️ We present <b><span style="color: #d9534f;">AutoDriveRL</span></b>, a unified training framework that formulates autonomous driving as a <b>structured reasoning process</b> over four core tasks. Each task is independently modeled as a vision-language QA problem and optimized using <b>task-specific reward models</b>, enabling <b>fine-grained reinforcement signals</b> at different reasoning stages. Within this framework, we train <b><span style="color: #d9534f;">DriveRX</span></b>, a cross-task reasoning VLM designed for <b>real-time decision-making</b>. DriveRX achieves <b>strong performance</b> on the public benchmark, outperforming GPT-4o in behavior reasoning and demonstrating <b>robustness</b> under complex or corrupted driving conditions. 🏆
+            </p>
           </p>
           <p>
-            To address these limitations, we propose <b>AutoDriveRL</b>, a unified training framework that employs semantic reward modeling to facilitate structured reasoning across the four core autonomous driving tasks. Furthermore, we introduce <b>DriveLM-Hard</b>, a new benchmark derived from DriveLM, which is more challenging and maintains a balanced ratio of complex to simple behaviors.
+            🔍 <span style="color: #5bc0de;">Our work provides several <b>key insights</b>:</span>
           </p>
+          <ul style="list-style-type: none; padding-left: 1em;">
+            <li>1. 🔥 During training, the reward curves showed a clear staged trend. 👀 Perception and 🔮 Prediction improved rapidly and saturated quickly, while 🗺️ Planning and 🤖 Behavior progressed more slowly. This reflects <b>the tasks' structural hierarchy</b>—lower-level tasks are relatively simple and focus on visual understanding and pattern recognition, while higher-level tasks require <b>multi-step reasoning</b> and rely on semantic representations from previous tasks.</li>
+
+            <li>2. ✂️ By incorporating <b>conciseness requirements</b> into the reward prompt, we successfully limited model length growth, resulting in <b>shorter and more effective responses</b> that meet the needs of autonomous driving scenarios.</li>
+
+            <li>3. 🤝 Comparing models trained with curriculum learning and joint training across the four tasks, we found that <b>jointly optimizing multiple reasoning stages</b> enhances the model's overall effectiveness in autonomous driving tasks. This highlights the benefits of jointly optimizing semantically distinct reasoning stages, enabling the model to learn <b>shared representations and task interactions</b> that improve generalization.</li>
+
+            <li>4. ⚠️ When using LLM-as-judge, we found that it is crucial to design <b>rigorous prompts</b> for scoring; otherwise, the system can be easily hacked.</li>
+          </ul>
           <p>
-            Based on the AutoDriveRL framework, we trained the DriveRX model, which surpassing GPT-4o by <b>6.98</b> points in behavior tasks
-          </p>
-          <p>
-            Our work provides several key insights:<br>
-            1. During training, the reward curves showed a clear staged trend. Perception and Prediction improved rapidly and saturated quickly, while Planning and Behavior progressed more slowly. This reflects <b>the tasks' structural hierarchy—lower-level tasks are relatively simple and focus on visual understanding and pattern recognition, while higher-level tasks require multi-step reasoning and rely on semantic representations from previous tasks.</b><br>
-            2. By incorporating conciseness requirements into the reward prompt, we successfully limited model length growth, resulting in <b>shorter and more effective responses</b> that meet the needs of autonomous driving scenarios.<br>
-            3. Comparing models trained with curriculum learning and joint training across the four tasks, we found that <b>jointly optimizing multiple reasoning stages enhances the model's overall effectiveness in autonomous driving tasks.</b> This highlights the benefits of jointly optimizing semantically distinct reasoning stages, enabling the model to learn shared representations and task interactions that improve generalization.<br>
-            4. When using LLM-as-judge, we found that it is crucial to design rigorous prompts for scoring; otherwise, the system can be easily hacked.
-          </p>
-          <!-- <p>
-            On DriveBench, DriveRX shows significant advantages:<br>
-            • Behavior task score of 62.02, surpassing GPT-4o by 6.98 points<br>
-            • 78.63 accuracy in Planning task<br>
-            • Superior performance in perception and prediction tasks
-          </p> -->
-          <p>
-            We've open-sourced AutoDriveRL and DriveRX to support autonomous driving research, providing a new paradigm for multi-task reasoning and advancing safer, more transparent autonomous systems.
+            🌍 We've <b>open-sourced <span style="color: #d9534f;">AutoDriveRL</span> and <span style="color: #d9534f;">DriveRX</span></b> to support autonomous driving research, providing a <b>new paradigm for multi-task reasoning</b> and advancing <b>safer, more transparent autonomous systems</b>. 🎉
           </p>
         </div>
         <br><br>
@@ -194,28 +190,6 @@
     </div>
   </div>
 </section>
-
-
-<!-- 
-1. 之前模型有哪里表现不好: 在四种自动驾驶任务(Perception, Prediction, Planning, Behavior)上表现差，其他任务上的优秀表现难以泛化到自动驾驶任务上。
-DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型会偏好直行等简单的回答，DriveBench没法测出来模型在需要复杂决策的场景下的表现。
-2. 我们干了什么: We propose AutoDriveRL, a unified training framework that leverages semantic reward modeling to enable structured reasoning across four core autonomous driving tasks: perception, prediction, planning, and behavior.
-我们基于DriveLM提出了一个新的Benchmark: DriveLM-Hard，难度大，保持复杂行为与简单行为占比接近。
-3. 表现怎么样
-基于AutoDriveRL框架训练了一个模型DriveRX,这个模型在behavior的表现上比GPT-4o好。
-4. 证明了什么
-- 我们发现在训练过程中the reward curves exhibit a clear staged trend: Perception and Prediction improve rapidly in early training and quickly saturate, while Planning and Behavior progress more slowly and gradually. This pattern reflects the structural hierarchy of the tasks—lower-level tasks are relatively simple, focusing on visual understanding and pattern recognition, whereas higher-level tasks require multi-step reasoning and rely on semantic representations generated by preceding tasks.
-- 我们通过在reward prompt加上对简洁性的要求，抑制了模型长度的增长，使得模型的回答更简短有效，符合自动驾驶场景需求
-- 我们对比了四种任务课程学习与联合训练得到的模型的表现，发现This result confirms that jointly optimizing multiple reasoning stages—rather than training them in isolation—enhances the model’s overall effectiveness in autonomous driving tasks.This highlights the benefit of jointly optimizing semantically distinct reasoning stages, allowing the model to learn shared representations and task interactions that improve generalization.
-- 我们发现llm-as-judge的时候要编写严谨的prompt来打分，否则容易被hack掉
--->
-
-<!-- 
-1. perception先涨
-2. response length
-3. 课程学习跟joint训练
-4. model eval被hack的事情
--->
 
 <!-- Framework Section -->
 <section class="hero is-light is-small mb-0">
@@ -233,7 +207,7 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
         <div class="content has-text-centered">
           <img src="static/images/fig1_framework.png" width="100%"/>
           <p>
-            Overview of the AutoDriveRL framework. 
+            🏗️ Overview of the AutoDriveRL framework. 
             The left diagram shows the structured reasoning chain decomposing autonomous driving into four core tasks, 
             and the right diagram illustrates the reinforcement learning training pipeline.
           </p>
@@ -247,36 +221,66 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
   <div class="container">
     <div class="columns is-centered has-text-centered m-6">
       <div class="column is-four-fifths">
-        <!-- <h2 class="title is-3" id="framework">Framework Design</h2> -->
         <div class="content has-text-justified">
           <p>
-            AutoDriveRL overcomes the limitations of traditional end-to-end models and achieves interpretable, cross-task reasoning optimization through task decomposition and reinforcement learning.
+            🧠 AutoDriveRL overcomes the limitations of traditional end-to-end models and achieves interpretable, cross-task reasoning optimization through task decomposition and reinforcement learning.
           </p>
           <p>
-            <b>(1) Task Formalization</b>:<br>
+            <b>🔹 (1) Task Formalization</b>:<br>
             Autonomous driving is broken down into four core subtasks—Perception (identifying scene elements), Prediction (anticipating dynamic agent behaviors), Planning (determining path or directional actions), and Behavior (conducting behavior prediction and strategy selection). Each subtask is modeled as a visual question-answering (VQA) problem, with inputs being scene images and task-specific natural language queries, and outputs being interpretable decision responses. The tasks are implicitly coupled through a shared semantic space rather than explicit output dependencies.
           </p>
           <p>
-            <b>(2) Data Construction</b>:<br>
+            <b>🔹 (2) Data Construction</b>:<br>
             6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling.
 
+            <div class="columns is-centered m-5">
+              <div class="column is-half">
+                <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                  <div class="content has-text-centered">
+                    <img src="static/images/data_drivelm.png" width="100%"/>
+                    <p>📊 DriveLM Action Distribution</p>
+                  </div>
+                </div>
+              </div>
+              <div class="column is-half">
+                <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                  <div class="content has-text-centered">
+                    <img src="static/images/data_drivelm_hard.png" width="100%"/>
+                    <p>📈 DriveLM-Hard Action Distribution</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div class="carousel results-carousel m-5">
               <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
                 <div class="content has-text-centered">
-                  <img src="static/images/data_drivelm.png" width="50%"/>
-                  <p>DriveLM Action Distribution</p>
+                  <img src="static/images/zhu1.png" width="50%"/>
+                  <p>📊 Align-DS-V Score Distribution</p>
                 </div>
               </div>
               <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
                 <div class="content has-text-centered">
-                  <img src="static/images/data_drivelm_hard.png" width="50%"/>
-                  <p>DriveLM-Hard Action Distribution</p>
+                  <img src="static/images/zhu2.png" width="50%"/>
+                  <p>📈 Qwen2.5-VL-7B-Instruct Score Distribution</p>
+                </div>
+              </div>
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/zhu3.png" width="50%"/>
+                  <p>📊 Qwen2.5-VL-72B-Instruct Score Distribution</p>
+                </div>
+              </div>
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/zhu4.png" width="50%"/>
+                  <p>📈 Train Split</p>
                 </div>
               </div>
             </div>
           </p>
           <p>
-            <b>(3) Reward Model Design</b>:<br>
+            <b>🔹 (3) Reward Model Design</b>:<br>
             A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions.
             <div class="carousel results-carousel m-5">
               <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
@@ -307,166 +311,21 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
   </div>
 </section>
 
-<!-- <section>
-  <div class="container">
-    <div class="columns is-centered has-text-centered m-6">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Evaluation Metrics</h2>
-        <div class="content has-text-justified">
-          <p>
-            To comprehensively assess the model's reasoning capabilities in autonomous driving scenarios, we adopt a multi-dimensional evaluation system:
-            <b>1. Task Accuracy</b>: GPT scores for Perception, Prediction, Planning, and Behavior tasks in clean scenarios and 15 visual degradation scenarios.
-            <b>2. Reasoning Efficiency</b>: Measuring model response time and output token length to evaluate real-time performance.
-            <b>3. Cross-Task Consistency</b>: Analyzing the consistency of semantic representations across multi-task reasoning, measured by KL divergence for inter-task knowledge transfer.
-            <b>4. Extreme Scenario Robustness</b>: Evaluating model generalization on the DriveLM-Hard subset (including high-density traffic, rare behaviors, etc.).
-          </p>
-          <div id="metrics-carousel" class="carousel results-carousel">
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/fig5_metrics.png" width="100%"/>
-                <p> Task accuracy comparison (GPT scores) of different models in clean scenarios.
-                </p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/fig6_robustness.png" width="90%"/>
-                <p> Robustness performance under visual degradations (taking the Behavior task as an example).
-                </p>
-              </div>
-            </div>
-            <div class="box m-5">
-              <div class="content has-text-centered">
-                <img src="static/images/fig7_inference_time.png" width="90%"/>
-                <p> Model inference time vs. output length comparison: DriveRX achieves the fastest response while ensuring accuracy.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 <!-- Experimental Results -->
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-    <h1 class="title is-1">Experimental Results</h1>
+    <h1 class="title is-1">📊 Experimental Results</h1>
   </div>
 </section>
 
 <!-- Leaderboard -->
-<!-- <section class="section">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-full has-text-centered content">
-        <h2 class="title is-3" id="leaderboard">DriveBench Benchmark Performance</h2>
-        <div class="content">
-          <p class="mt-3">GPT score results on the DriveBench test set (19,200 frames), including clean and visually degraded scenarios.</p>
-          <table id="table1" class="js-sort-table">
-            <tr>
-              <td class="js-sort-number"><strong>#</strong></td>
-              <td class="js-sort"><strong>Model</strong></td>
-              <td class="js-sort"><strong>Source</strong></td>
-              <td class="js-sort-date"><strong>Date</strong></td>
-              <td class="js-sort-number"><strong>Perception</strong></td>
-              <td class="js-sort-number"><strong>Prediction</strong></td>
-              <td class="js-sort-number"><strong>Planning</strong></td>
-              <td class="js-sort-number"><strong>Behavior</strong></td>
-              <td class="js-sort-number"><strong>Average</strong></td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td><b>DriveRX 🏆</b></td>
-              <td><a href="https://pris-cv.github.io/DriveRX/" class="ext-link" style="font-size: 16px;">Official</a></td>
-              <td>2025-05</td>
-              <td><b>32.88</b></td>
-              <td><b>52.20</b></td>
-              <td><b>78.63</b></td>
-              <td><b>62.02</b></td>
-              <td><b>56.93</b></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td><b>GPT-4o</b></td>
-              <td><a href="https://openai.com/index/hello-gpt-4o/" class="ext-link" style="font-size: 16px;">OpenAI</a></td>
-              <td>2024-08</td>
-              <td>41.51</td>
-              <td>50.92</td>
-              <td>84.82</td>
-              <td>55.04</td>
-              <td>58.07</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td><b>Qwen2.5-VL 72B</b></td>
-              <td><a href="https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct" class="ext-link" style="font-size: 16px;">Hugging Face</a></td>
-              <td>2025-02</td>
-              <td>37.56</td>
-              <td>50.47</td>
-              <td>77.18</td>
-              <td>55.57</td>
-              <td>55.19</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td><b>InternVL3 78B</b></td>
-              <td><a href="https://huggingface.co/OpenGVLab/InternVL3-78B" class="ext-link" style="font-size: 16px;">OpenGVLab</a></td>
-              <td>2025-04</td>
-              <td>39.44</td>
-              <td>49.71</td>
-              <td>82.24</td>
-              <td>50.73</td>
-              <td>55.53</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td><b>MM-Eureka 7B</b></td>
-              <td><a href="https://huggingface.co/lmms-lab/MM-Eureka-7B" class="ext-link" style="font-size: 16px;">LMMS</a></td>
-              <td>2025-03</td>
-              <td>34.44</td>
-              <td>41.72</td>
-              <td>65.38</td>
-              <td>49.40</td>
-              <td>47.74</td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td><b>DriveLM 7B</b></td>
-              <td><a href="https://huggingface.co/OpenDriveLab/DriveLM" class="ext-link" style="font-size: 16px;">OpenDriveLab</a></td>
-              <td>2024-06</td>
-              <td>16.85</td>
-              <td>39.71</td>
-              <td>68.71</td>
-              <td>42.78</td>
-              <td>42.06</td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td><b>LLaVA-1.5 7B</b></td>
-              <td><a href="https://huggingface.co/liuhaotian/llava-v1.5-7b" class="ext-link" style="font-size: 16px;">LLaVA</a></td>
-              <td>2024-03</td>
-              <td>23.22</td>
-              <td>17.54</td>
-              <td>29.15</td>
-              <td>13.60</td>
-              <td>20.88</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 <section class="section">
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-full has-text-centered content">
-        <h2 class="title is-3" id="leaderboard">DriveBench Benchmark Performance</h2>
+        <h2 class="title is-3" id="leaderboard">🏆 DriveBench Benchmark Performance</h2>
         <div class="content">
-          <p class="mt-3">GPT score results on the DriveBench test set, including clean and visually degraded scenarios.</p>
+          <p class="mt-3">📈 GPT score results on the DriveBench test set (19,200 frames), including clean and visually degraded scenarios.</p>
           <table id="table1" class="js-sort-table">
             <thead>
               <tr style="background-color: #ddd; border-bottom: 2px solid #ddd;">
@@ -474,9 +333,9 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                 <th style="padding: 8px; text-align: left; color: #000;">🏆 Model</th>
                 <th style="padding: 8px; text-align: center; color: #000;">Size</th>
                 <th style="padding: 8px; text-align: center; color: #000;">Type</th>
-                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">👁️ Perception</th>
+                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">👀 Perception</th>
                 <th colspan="2" style="padding: 8px; text-align: center; color: #000;">🔮 Prediction</th>
-                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">⚙️ Planning</th>
+                <th colspan="2" style="padding: 8px; text-align: center; color: #000;">🗺️ Planning</th>
                 <th colspan="2" style="padding: 8px; text-align: center; color: #000;">🤖 Behavior</th>
               </tr>
               <tr style="background-color: #f0f0f0; border-bottom: 1px solid #ddd;">
@@ -606,9 +465,9 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-full has-text-centered content">
-        <h2 class="title is-3" id="leaderboard">DriveLM-Hard Benchmark Performance</h2>
+        <h2 class="title is-3" id="leaderboard">🏆 DriveLM-Hard Benchmark Performance</h2>
         <div class="content">
-          <p class="mt-3">Evaluations of VLMs across different driving tasks on DriveLM-Hard. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task in bold.</p>
+          <p class="mt-3">📊 Evaluations of VLMs across different driving tasks on DriveLM-Hard. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task in bold.</p>
           <table id="table1" class="js-sort-table">
             <thead>
               <tr style="background-color: #ddd; border-bottom: 2px solid #ddd;">
@@ -616,9 +475,9 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                 <th style="padding: 8px; text-align: left; color: #000;">🏆 Model</th>
                 <th style="padding: 8px; text-align: center; color: #000;">Size</th>
                 <th style="padding: 8px; text-align: center; color: #000;">Type</th>
-                <th style="padding: 8px; text-align: center; color: #000;">👁️ Perception</th>
+                <th style="padding: 8px; text-align: center; color: #000;">👀 Perception</th>
                 <th style="padding: 8px; text-align: center; color: #000;">🔮 Prediction</th>
-                <th style="padding: 8px; text-align: center; color: #000;">⚙️ Planning</th>
+                <th style="padding: 8px; text-align: center; color: #000;">🗺️ Planning</th>
                 <th style="padding: 8px; text-align: center; color: #000;">🤖 Behavior</th>
               </tr>
             </thead>
@@ -643,26 +502,6 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                 <td style="padding: 8px; text-align: center;">51.42</td>
                 <td style="padding: 8px; text-align: center;">42.00</td>
               </tr>
-              <!-- <tr>
-                <td style="padding: 8px; text-align: center;">2</td>
-                <td style="padding: 8px; text-align: left;"><strong>Qwen2.5-VL</strong></td>
-                <td style="padding: 8px; text-align: center;">7B</td>
-                <td style="padding: 8px; text-align: center;">Open</td>
-                <td style="padding: 8px; text-align: center;">26.10</td>
-                <td style="padding: 8px; text-align: center;">60.13</td>
-                <td style="padding: 8px; text-align: center;">32.41</td>
-                <td style="padding: 8px; text-align: center;">19.86</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px; text-align: center;">3</td>
-                <td style="padding: 8px; text-align: left;"><strong>InternVL3</strong></td>
-                <td style="padding: 8px; text-align: center;">8B</td>
-                <td style="padding: 8px; text-align: center;">Open</td>
-                <td style="padding: 8px; text-align: center;">31.29</td>
-                <td style="padding: 8px; text-align: center;">38.95</td>
-                <td style="padding: 8px; text-align: center;">31.78</td>
-                <td style="padding: 8px; text-align: center;">30.48</td>
-              </tr> -->
               <tr>
                 <td style="padding: 8px; text-align: center;">3</td>
                 <td style="padding: 8px; text-align: left;"><strong>Qwen2.5-VL</strong></td>
@@ -693,16 +532,6 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                 <td style="padding: 8px; text-align: center;">29.67</td>
                 <td style="padding: 8px; text-align: center;">23.21</td>
               </tr>
-              <!-- <tr>
-                <td style="padding: 8px; text-align: center;">7</td>
-                <td style="padding: 8px; text-align: left;">R1-Onevision<sup>[37]</sup></td>
-                <td style="padding: 8px; text-align: center;">7B</td>
-                <td style="padding: 8px; text-align: center;">Reasoning</td>
-                <td style="padding: 8px; text-align: center;">25.51</td>
-                <td style="padding: 8px; text-align: center;">46.60</td>
-                <td style="padding: 8px; text-align: center;">34.45</td>
-                <td style="padding: 8px; text-align: center;">29.03</td>
-              </tr> -->
               <tr>
                 <td style="padding: 8px; text-align: center;">6</td>
                 <td style="padding: 8px; text-align: left;"><strong>Align-DS-V</strong></td>
@@ -735,14 +564,23 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
   <div class="container">
     <div class="columns is-centered has-text-centered m-6">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Other Findings</h2>
+        <h2 class="title is-3">🔍 Other Findings</h2>
         <div class="content has-text-justified">
           <div id="analysis-carousel" class="carousel results-carousel">
             <div class="box m-5">
               <div class="content has-text-centered">
                 <img src="static/images/fig8_training_dynamics.png" width="90%"/>
-                <p> Training dynamics: Perception/Prediction tasks converge early, while Planning/Behavior tasks optimize gradually.
+                <p>📈 Training dynamics: Perception/Prediction tasks converge early, while Planning/Behavior tasks optimize gradually.
                 </p>
+                <p>🔥Findings: Lower-level tasks are relatively simple and focus on visual understanding and pattern recognition, while higher-level tasks require <b>multi-step reasoning</b> and rely on semantic representations from previous tasks.</p>
+              </div>
+            </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <img src="static/images/response_length_mean.png" width="90%"/>
+                <p> 📉 Mean Response Length: decrease gradually.
+                </p>
+                <p>🔥Findings: By incorporating <b>conciseness requirements</b> into the reward prompt, we successfully limited model length growth, resulting in <b>shorter and more effective responses</b> that meet the needs of autonomous driving scenarios.</p>
               </div>
             </div>
             <div class="box m-5">
@@ -755,7 +593,7 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                       <th style="text-align: center; padding: 8px;">👁️ Vision Encoder</th>
                       <th style="text-align: center; padding: 8px;">💬 Response Length</th>
                       <th style="text-align: center; padding: 8px;">🖼️ Image Tokens</th>
-                      <th style="text-align: center; padding: 8px;">🧠 Perception</th>
+                      <th style="text-align: center; padding: 8px;">👀 Perception</th>
                       <th style="text-align: center; padding: 8px;">⏱️ Infer times</th>
                     </tr>
                   </thead>
@@ -843,7 +681,10 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                     </tr>
                   </tbody>
                 </table>
-                <p style="margin-top: 10px;">Impact of different vision encoders on the perception task. We report DriveBench perception scores (higher is better), average response length (in tokens) per question, number of image tokens per image, and inference time per question (in seconds). For a fair comparison, inference time is reported only among models of the same size.</p>
+                <p style="margin-top: 10px;">📊 Impact of different vision encoders on the perception task. We report DriveBench perception scores (higher is better), average response length (in tokens) per question, number of image tokens per image, and inference time per question (in seconds). For a fair comparison, inference time is reported only among models of the same size.</p>
+                <p>
+                  🔥Findings: Dynamic-resolution VLMs like Qwen2.5-VL generates more vision tokens per image than fixed-resolution VLMs like Align-DS-V, incurring inference latency that complicates real-time autonomous driving decisions. In contrast, DriveRX's fixed - length feature processing pipeline, though slightly reducing perceptual performance due to CLIP - encoder - driven output limits, offers three key deployment advantages: deterministic inference efficiency, faster processing, and more predictable inference behavior.
+                </p>
               </div>
             </div>
             <div class="box m-5">
@@ -853,7 +694,7 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                     <tr style="border-bottom: 2px solid #000;">
                       <th style="text-align: left; padding: 8px;">Method</th>
                       <th style="text-align: center; padding: 8px;">Size</th>
-                      <th style="text-align: center; padding: 8px;">👁️ Perception</th>
+                      <th style="text-align: center; padding: 8px;">👀 Perception</th>
                       <th style="text-align: center; padding: 8px;">🔮 Prediction</th>
                       <th style="text-align: center; padding: 8px;">🗺️ Planning</th>
                       <th style="text-align: center; padding: 8px;">🤖 Behavior</th>
@@ -886,7 +727,8 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
                     </tr>
                   </tbody>
                 </table>
-                <p style="margin-top: 10px;">Performance Evaluation of Diverse Training Strategies on Align-DS-V Across Multiple Driving Tasks in DriveBench. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task.</p>
+                <p style="margin-top: 10px;">📊 Performance Evaluation of Diverse Training Strategies on Align-DS-V Across Multiple Driving Tasks in DriveBench. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task.</p>
+                <p>🔥Findings: Joint RL training, by optimizing multiple reasoning stages together instead of separately, improves performance across the four tasks at the same data scale, highlighting its benefit in learning shared representations and task interactions that boost generalization in autonomous driving models.</p>
               </div>
             </div>
           </div>
@@ -902,34 +744,34 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
   <div class="container">
     <div class="columns is-centered has-text-centered m-6">
       <div class="column is-four-fifths">
-        <h2 class="title is-3" id="case-study">Case Studies</h2>
+        <h2 class="title is-3" id="case-study">🔍 Case Studies</h2>
         <div class="content has-text-justified">
           <div id="case-carousel" class="carousel results-carousel">
             <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
               <div class="content has-text-centered">
                 <img src="static/images/fig11_perception_case.png" width="80%"/>
-                <p> Perception case: DriveRX correctly identifies front vehicles, while DriveLM misidentifies a fire hydrant as a relevant object.
+                <p> 👀 Perception case: DriveRX correctly identifies front vehicles, while DriveLM misidentifies a fire hydrant as a relevant object.
                 </p>
               </div>
             </div>
             <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
               <div class="content has-text-centered">
                 <img src="static/images/fig12_prediction_case.png" width="80%"/>
-                <p> Prediction Case: Qwen2.5-VL-72B-Instruct incorrectly identified objects in the target area as road barriers, while DriveRX successfully pointed out there were no obvious obstacles in the image.
+                <p> 🔮 Prediction Case: Qwen2.5-VL-72B-Instruct incorrectly identified objects in the target area as road barriers, while DriveRX successfully pointed out there were no obvious obstacles in the image.
                 </p>
               </div>
             </div>
             <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
               <div class="content has-text-centered">
                 <img src="static/images/fig13_planning_case.png" width="80%"/>
-                <p> Planning case: Align-DS-V suggests unnecessary slowing, while DriveRX judges to maintain speed based on the scene.
+                <p> 🗺️ Planning case: Align-DS-V suggests unnecessary slowing, while DriveRX judges to maintain speed based on the scene.
                 </p>
               </div>
             </div>
             <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
               <div class="content has-text-centered">
                 <img src="static/images/fig14_behavior_case.png" width="80%"/>
-                <p> Behavior case: GPT-4o mispredicts a left turn, while DriveRX correctly predicts straight movement through structured reasoning.
+                <p> 🤖 Behavior case: GPT-4o mispredicts a left turn, while DriveRX correctly predicts straight movement through structured reasoning.
                 </p>
               </div>
             </div>
@@ -943,7 +785,7 @@ DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型
 <!-- BibTeX -->
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX Citation</h2>
+    <h2 class="title">📚 BibTeX Citation</h2>
     <pre><code>@article{diao2025driverx,
   title={DriveRX: A Vision-Language Reasoning Model for Cross-Task Autonomous Driving},
   author={Diao, Muxi and Yang, Lele and Yin, Hongbo and Wang, Zhexu and Wang, Yejie and Tian, Daxin and Liang, Kongming and Ma, Zhanyu},
