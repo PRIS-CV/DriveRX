@@ -57,7 +57,7 @@
         <div class="column has-text-centered">
           <!-- Main Title -->
           <h1 class="title is-1 publication-title">
-            <img src="static/images/driverx_icon.png" style="width:1em; vertical-align: middle" alt="Logo"/> 
+            <img src="static/images/driverx_icon.png" style="width:2em; vertical-align: middle" alt="Logo"/> 
             <span class="driverx" style="vertical-align: middle">DriveRX</span>            
           </h1>
           <!-- Subtitle -->
@@ -89,7 +89,7 @@
               <a href="index.html" style="text-decoration: none; color: inherit;">Kongming Liang<sup style="color:#4B70F5;"><b>1</b></sup></a>,
             </span>
             <span class="author-block">
-              <a href="index.html" style="text-decoration: none; color: inherit;">Zhanyu Ma†<sup style="color:#4B70F5;"><b>1</b></sup></a>,
+              <a href="index.html" style="text-decoration: none; color: inherit;">Zhanyu Ma<sup style="color:#4B70F5;"><b>1</b></sup></a>,
             </span>
           </div>
           
@@ -147,28 +147,45 @@
   </div>
 </section>
 
+<section class="hero is-light is-small mb-0">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 driverx">
+      <span class="driverx" style="vertical-align: middle">Overall</span>
+    </h1>
+  </div>
+</section>
+
+
 <!-- Main Content -->
 <section class="section is-small">
   <div class="container">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Research Overview</h2>
         <div class="content has-text-justified">
           <p>
-            Autonomous driving systems require real-time reasoning across perception, prediction, planning, and behavior in dynamic environments. Conventional models struggle with generalization, while existing vision-language models are limited by isolated modules. Our DriveRX model, trained in the AutoDriveRL framework, addresses these issues by breaking down autonomous driving into four structured subtasks—Perception, Prediction, Planning, and Behavior—each optimized with task-specific reward models.
+            <img src="static/images/fig3_task_decomposition.png" width="100%"/>
+            <p class="has-text-centered">Comparison of model responses before (left) and after (right) training with AutoDriveRL framework</p>
+            Previous VLMs exhibited several key shortcomings. They performed poorly across four critical autonomous driving tasks: <b>Perception, Prediction, Planning, and Behavior</b>. Additionally, their strong performance on other tasks was difficult to generalize to autonomous driving tasks. Also, the biased data distribution in the DriveLM and DriveBench datasets hindered generalization. Models trained on DriveLM often failed to generalize well, and DriveBench was unable to effectively evaluate model performance in scenarios requiring complex decisions.
           </p>
           <p>
-            Core innovations of AutoDriveRL and DriveRX include:<br>
-            <b>(1) Structured Reasoning Chain</b>: Decomposing driving into four VQA-style tasks.<br>
-            <b>(2) Reinforcement Learning Optimization</b>: Using the GRPO algorithm for collaborative optimization.<br>
-            <b>(3) Real-time Reasoning Optimization</b>: Implementing reward-guided reasoning compression.
+            To address these limitations, we propose <b>AutoDriveRL</b>, a unified training framework that employs semantic reward modeling to facilitate structured reasoning across the four core autonomous driving tasks. Furthermore, we introduce <b>DriveLM-Hard</b>, a new benchmark derived from DriveLM, which is more challenging and maintains a balanced ratio of complex to simple behaviors.
           </p>
           <p>
+            Based on the AutoDriveRL framework, we trained the DriveRX model, which surpassing GPT-4o by <b>6.98</b> points in behavior tasks
+          </p>
+          <p>
+            Our work provides several key insights:<br>
+            1. During training, the reward curves showed a clear staged trend. Perception and Prediction improved rapidly and saturated quickly, while Planning and Behavior progressed more slowly. This reflects <b>the tasks' structural hierarchy—lower-level tasks are relatively simple and focus on visual understanding and pattern recognition, while higher-level tasks require multi-step reasoning and rely on semantic representations from previous tasks.</b><br>
+            2. By incorporating conciseness requirements into the reward prompt, we successfully limited model length growth, resulting in <b>shorter and more effective responses</b> that meet the needs of autonomous driving scenarios.<br>
+            3. Comparing models trained with curriculum learning and joint training across the four tasks, we found that <b>jointly optimizing multiple reasoning stages enhances the model's overall effectiveness in autonomous driving tasks.</b> This highlights the benefits of jointly optimizing semantically distinct reasoning stages, enabling the model to learn shared representations and task interactions that improve generalization.<br>
+            4. When using LLM-as-judge, we found that it is crucial to design rigorous prompts for scoring; otherwise, the system can be easily hacked.
+          </p>
+          <!-- <p>
             On DriveBench, DriveRX shows significant advantages:<br>
             • Behavior task score of 62.02, surpassing GPT-4o by 6.98 points<br>
             • 78.63 accuracy in Planning task<br>
             • Superior performance in perception and prediction tasks
-          </p>
+          </p> -->
           <p>
             We've open-sourced AutoDriveRL and DriveRX to support autonomous driving research, providing a new paradigm for multi-task reasoning and advancing safer, more transparent autonomous systems.
           </p>
@@ -179,6 +196,27 @@
   </div>
 </section>
 
+
+<!-- 
+1. 之前模型有哪里表现不好: 在四种自动驾驶任务(Perception, Prediction, Planning, Behavior)上表现差，其他任务上的优秀表现难以泛化到自动驾驶任务上。
+DriveLM数据集以及DriveBench数据分布有偏，导致训练出来的模型会偏好直行等简单的回答，DriveBench没法测出来模型在需要复杂决策的场景下的表现。
+2. 我们干了什么: We propose AutoDriveRL, a unified training framework that leverages semantic reward modeling to enable structured reasoning across four core autonomous driving tasks: perception, prediction, planning, and behavior.
+我们基于DriveLM提出了一个新的Benchmark: DriveLM-Hard，难度大，保持复杂行为与简单行为占比接近。
+3. 表现怎么样
+基于AutoDriveRL框架训练了一个模型DriveRX,这个模型在behavior的表现上比GPT-4o好。
+4. 证明了什么
+- 我们发现在训练过程中the reward curves exhibit a clear staged trend: Perception and Prediction improve rapidly in early training and quickly saturate, while Planning and Behavior progress more slowly and gradually. This pattern reflects the structural hierarchy of the tasks—lower-level tasks are relatively simple, focusing on visual understanding and pattern recognition, whereas higher-level tasks require multi-step reasoning and rely on semantic representations generated by preceding tasks.
+- 我们通过在reward prompt加上对简洁性的要求，抑制了模型长度的增长，使得模型的回答更简短有效，符合自动驾驶场景需求
+- 我们对比了四种任务课程学习与联合训练得到的模型的表现，发现This result confirms that jointly optimizing multiple reasoning stages—rather than training them in isolation—enhances the model’s overall effectiveness in autonomous driving tasks.This highlights the benefit of jointly optimizing semantically distinct reasoning stages, allowing the model to learn shared representations and task interactions that improve generalization.
+- 我们发现llm-as-judge的时候要编写严谨的prompt来打分，否则容易被hack掉
+-->
+
+<!-- 
+1. perception先涨
+2. response length
+3. 课程学习跟joint训练
+4. model eval被hack的事情
+-->
 
 <!-- Framework Section -->
 <section class="hero is-light is-small mb-0">
@@ -210,7 +248,7 @@
   <div class="container">
     <div class="columns is-centered has-text-centered m-6">
       <div class="column is-four-fifths">
-        <h2 class="title is-3" id="framework">Framework Design</h2>
+        <!-- <h2 class="title is-3" id="framework">Framework Design</h2> -->
         <div class="content has-text-justified">
           <p>
             AutoDriveRL overcomes the limitations of traditional end-to-end models and achieves interpretable, cross-task reasoning optimization through task decomposition and reinforcement learning.
@@ -222,10 +260,47 @@
           <p>
             <b>(2) Data Construction</b>:<br>
             6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling.
+
+            <div class="carousel results-carousel m-5">
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/data_drivelm.png" width="50%"/>
+                  <p>DriveLM Action Distribution</p>
+                </div>
+              </div>
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/data_drivelm_hard.png" width="50%"/>
+                  <p>DriveLM-Hard Action Distribution</p>
+                </div>
+              </div>
+            </div>
           </p>
           <p>
             <b>(3) Reward Model Design</b>:<br>
             A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions.
+            <div class="carousel results-carousel m-5">
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/rm_1.png" width="50%"/>
+                </div>
+              </div>
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/rm_2.png" width="50%"/>
+                </div>
+              </div>
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/rm_3.png" width="50%"/>
+                </div>
+              </div>
+              <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
+                <div class="content has-text-centered">
+                  <img src="static/images/rm_4.png" width="50%"/>
+                </div>
+              </div>
+            </div>
           </p>
         </div>
       </div>
@@ -385,7 +460,6 @@
     </div>
   </div>
 </section> -->
-
 
 <section class="section">
   <div class="container">
@@ -773,12 +847,56 @@
                 <p style="margin-top: 10px;">Impact of different vision encoders on the perception task. We report DriveBench perception scores (higher is better), average response length (in tokens) per question, number of image tokens per image, and inference time per question (in seconds). For a fair comparison, inference time is reported only among models of the same size.</p>
               </div>
             </div>
+            <div class="box m-5">
+              <div class="content has-text-centered">
+                <table style="width:90%; border-collapse: collapse; margin: 0 auto;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid #000;">
+                      <th style="text-align: left; padding: 8px;">Method</th>
+                      <th style="text-align: center; padding: 8px;">Size</th>
+                      <th style="text-align: center; padding: 8px;">👁️ Perception</th>
+                      <th style="text-align: center; padding: 8px;">🔮 Prediction</th>
+                      <th style="text-align: center; padding: 8px;">🗺️ Planning</th>
+                      <th style="text-align: center; padding: 8px;">🤖 Behavior</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">DriveRX-SFT</td>
+                      <td style="text-align: center; padding: 8px;">8B</td>
+                      <td style="text-align: right; padding: 8px;">23.73</td>
+                      <td style="text-align: right; padding: 8px;">43.07</td>
+                      <td style="text-align: right; padding: 8px;">73.07</td>
+                      <td style="text-align: right; padding: 8px;">15.34</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">DriveRX-Separate</td>
+                      <td style="text-align: center; padding: 8px;">8B</td>
+                      <td style="text-align: right; padding: 8px;">24.73</td>
+                      <td style="text-align: right; padding: 8px;">46.59</td>
+                      <td style="text-align: right; padding: 8px;">76.11</td>
+                      <td style="text-align: right; padding: 8px;">55.18</td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; padding: 8px;">DriveRX-Joint</td>
+                      <td style="text-align: center; padding: 8px;">8B</td>
+                      <td style="text-align: right; padding: 8px; background-color: #fff0f0;"><strong>32.88</strong></td>
+                      <td style="text-align: right; padding: 8px; background-color: #fff0f0;"><strong>52.20</strong></td>
+                      <td style="text-align: right; padding: 8px; background-color: #fff0f0;"><strong>78.63</strong></td>
+                      <td style="text-align: right; padding: 8px; background-color: #fff0f0;"><strong>62.02</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p style="margin-top: 10px;">Performance Evaluation of Diverse Training Strategies on Align-DS-V Across Multiple Driving Tasks in DriveBench. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </section>
+
 
 <!-- Case Studies -->
 <section>
