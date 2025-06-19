@@ -232,7 +232,8 @@
           </p>
           <p>
             <b>🔹 (2) Data Construction</b>:<br>
-            6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling. The following figures present the proportion of various Actions in the dataset as well as the frame score distributions of Align-DS-V, Qwen2.5-VL-7B-Instruct, and Qwen2.5-VL-72B-Instruct.
+            6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling.<br>
+            The following figures present the proportion of various Actions in the dataset as well as the frame score distributions of Align-DS-V, Qwen2.5-VL-7B-Instruct, and Qwen2.5-VL-72B-Instruct.
 
             <div class="carousel results-carousel m-5">
                <div class="box" style="height: 100%;">
@@ -279,7 +280,8 @@
           </p>
           <p>
             <b>🔹 (3) Reward Model Design</b>:<br>
-            A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions. The following figures demonstrate the reward model prompts for each task.
+            A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions.<br>
+            The following figures demonstrate the reward model prompts for each task.<br>
             <div class="carousel results-carousel m-5">
               <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
                 <div class="content has-text-centered">
