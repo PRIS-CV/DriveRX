@@ -161,28 +161,28 @@
         <div class="content has-text-justified">
           <p>
             <img src="static/images/fig3_task_decomposition.png" width="100%"/>
-            <p class="has-text-centered">🔄 Comparison of model responses before (left) and after (right) training with AutoDriveRL framework</p>
+            <p class="has-text-centered">Comparison of model responses from the base model (left 👈) and <b>DriveRX</b> after AutoDriveRL training (right 👉)</p>
             <p>
-              🚗 <span style="color: #4a6baf;">Autonomous driving requires <b>real-time, robust reasoning</b> across 👀 perception, 🔮 prediction, 🗺️ planning, and 🤖 behavior.</span> However, conventional end-to-end models fail to generalize in complex scenarios due to <b>the lack of structured reasoning</b>. While recent vision-language models (VLMs) have been applied to driving tasks, they typically rely on <b>isolated modules and static supervision</b>, limiting their ability to support multi-stage decision-making.
+              🚗 <span style="color: #4a6baf;">Autonomous driving requires <b>real-time, robust reasoning</b> across 👀 perception, 🔮 prediction, 🗺️ planning, and 🤖 behavior.</span> However, conventional end-to-end models fail to generalize in complex scenarios due to <b>the lack of structured reasoning</b>. While recent vision-language models (VLMs) have been applied to driving tasks, they typically rely on <b>isolated modules and static supervision</b>, which fundamentally restricts their ability to perform coherent multi-stage reasoning and generalize to real-world driving challenges.
             </p>
             <p>
               ⚙️ We present <b><span style="color: #d9534f;">AutoDriveRL</span></b>, a unified training framework that formulates autonomous driving as a <b>structured reasoning process</b> over four core tasks. Each task is independently modeled as a vision-language QA problem and optimized using <b>task-specific reward models</b>, enabling <b>fine-grained reinforcement signals</b> at different reasoning stages. Within this framework, we train <b><span style="color: #d9534f;">DriveRX</span></b>, a cross-task reasoning VLM designed for <b>real-time decision-making</b>. DriveRX achieves <b>strong performance</b> on the public benchmark, outperforming GPT-4o in behavior reasoning and demonstrating <b>robustness</b> under complex or corrupted driving conditions. 🏆
             </p>
           </p>
           <p>
-            🔍 <span style="color: #5bc0de;">Our work provides several <b>key insights</b>:</span>
+            🔍 <span style="color: #5bc0de;">Our work provides several key insights into the <b>reinforcement learning process for vision-language model reasoning:</b></span>
           </p>
           <ul style="list-style-type: none; padding-left: 1em;">
             <li>1. 🔥 During training, the reward curves showed a clear staged trend. 👀 Perception and 🔮 Prediction improved rapidly and saturated quickly, while 🗺️ Planning and 🤖 Behavior progressed more slowly. This reflects <b>the tasks' structural hierarchy</b>—lower-level tasks are relatively simple and focus on visual understanding and pattern recognition, while higher-level tasks require <b>multi-step reasoning</b> and rely on semantic representations from previous tasks.</li>
 
             <li>2. ✂️ By incorporating <b>conciseness requirements</b> into the reward prompt, we successfully limited model length growth, resulting in <b>shorter and more effective responses</b> that meet the needs of autonomous driving scenarios.</li>
 
-            <li>3. 🤝 Comparing models trained with curriculum learning and joint training across the four tasks, we found that <b>jointly optimizing multiple reasoning stages</b> enhances the model's overall effectiveness in autonomous driving tasks. This highlights the benefits of jointly optimizing semantically distinct reasoning stages, enabling the model to learn <b>shared representations and task interactions</b> that improve generalization.</li>
+            <li>3. 🤝 Compared to curriculum learning that trains the model sequentially across stages (perception → prediction → planning → behavior), we find that <b>jointly training all four reasoning stages significantly improves overall performance on autonomous driving tasks</b>. This result highlights the advantages of jointly optimizing semantically distinct reasoning stages, enabling the model to learn <b>shared representations and cross-task interactions</b> that enhance generalization to complex scenarios.</li>
 
             <li>4. ⚠️ When using LLM-as-judge, we found that it is crucial to design <b>rigorous prompts</b> for scoring; otherwise, the system can be easily hacked.</li>
           </ul>
           <p>
-            🌍 We've <b>open-sourced <span style="color: #d9534f;">AutoDriveRL</span> and <span style="color: #d9534f;">DriveRX</span></b> to support autonomous driving research, providing a <b>new paradigm for multi-task reasoning</b> and advancing <b>safer, more transparent autonomous systems</b>. 🎉
+            🌍 We will <b>open-source <span style="color: #d9534f;">AutoDriveRL</span> and <span style="color: #d9534f;">DriveRX</span></b> to support autonomous driving research, providing a <b>new paradigm for multi-task reasoning</b> and advancing <b>safer, more transparent autonomous systems</b>. 🎉
           </p>
         </div>
         <br><br>
@@ -232,28 +232,25 @@
           </p>
           <p>
             <b>🔹 (2) Data Construction</b>:<br>
-            6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling.
+            6K high-quality samples are filtered from the DriveLM dataset. Task difficulty is controlled using the framework score D<sub>i</sub>, and class balancing strategies are employed to address action distribution imbalance. Low-quality samples (e.g., with annotation errors or duplicate options) are first removed. For each visual question, responses are sampled from multiple vision-language models to compute task-specific quality scores, ensuring consistent and reproducible training data without human labeling. The following figures present the proportion of various Actions in the dataset as well as the frame score distributions of Align-DS-V, Qwen2.5-VL-7B-Instruct, and Qwen2.5-VL-72B-Instruct.
 
-            <div class="columns is-centered m-5">
-              <div class="column is-half">
-                <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
-                  <div class="content has-text-centered">
-                    <img src="static/images/data_drivelm.png" width="100%"/>
-                    <p>📊 DriveLM Action Distribution</p>
-                  </div>
-                </div>
-              </div>
-              <div class="column is-half">
-                <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
-                  <div class="content has-text-centered">
-                    <img src="static/images/data_drivelm_hard.png" width="100%"/>
-                    <p>📈 DriveLM-Hard Action Distribution</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
             <div class="carousel results-carousel m-5">
+               <div class="box" style="height: 100%;">
+                 <div class="columns is-centered">
+                   <div class="column is-half">
+                     <div class="content has-text-centered">
+                       <img src="static/images/data_drivelm.png" width="100%"/>
+                       <p>📊 DriveLM Action Distribution</p>
+                     </div>
+                   </div>
+                   <div class="column is-half">
+                     <div class="content has-text-centered">
+                       <img src="static/images/data_drivelm_hard.png" width="100%"/>
+                       <p>📈 <span style="color: #d9534f;">Ours</span> Action Distribution</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
               <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
                 <div class="content has-text-centered">
                   <img src="static/images/zhu1.png" width="50%"/>
@@ -282,7 +279,7 @@
           </p>
           <p>
             <b>🔹 (3) Reward Model Design</b>:<br>
-            A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions.
+            A two-stage reward mechanism is designed. First, a rule-based reward function penalizes outputs that exceed a predefined length or exhibit repetitive sentence patterns. Second, for the remaining candidates, an open-source language model assigns a task-aware quality score based on five criteria: correctness, behavioral understanding, contextual relevance, logic and reasoning, and clarity of reasoning. This reward design enables the model to receive step-wise feedback during training, ensuring reliable behavior decision-making even under degraded visual conditions. The following figures demonstrate the reward model prompts for each task.
             <div class="carousel results-carousel m-5">
               <div class="box" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
                 <div class="content has-text-centered">
@@ -324,7 +321,7 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-full has-text-centered content">
-        <h2 class="title is-3" id="leaderboard">🏆 DriveBench Benchmark Performance</h2>
+        <h2 class="title is-3" id="leaderboard"><a href="https://drive-bench.github.io/" target="_blank">🏆 DriveBench Benchmark Performance</a></h2>
         <div class="content">
           <p class="mt-3">📈 GPT score results on the DriveBench test set (19,200 frames), including clean and visually degraded scenarios.</p>
           <table id="table1" class="js-sort-table">
@@ -466,9 +463,9 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-full has-text-centered content">
-        <h2 class="title is-3" id="leaderboard">🏆 DriveLM-Hard Benchmark Performance</h2>
+        <h2 class="title is-3" id="leaderboard">🏆 <a href="https://huggingface.co/datasets/ssl-asuka/AutoDriveRL">Ours Benchmark Performance</a></h2>
         <div class="content">
-          <p class="mt-3">📊 Evaluations of VLMs across different driving tasks on DriveLM-Hard. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task in bold.</p>
+          <p class="mt-3">📊 Evaluations of VLMs across different driving tasks on ours benchmark. Each column shows the GPT score (↑) for the clean version of each task. We highlight the best-performing open-source model for each task in bold.</p>
           <table id="table1" class="js-sort-table">
             <thead>
               <tr style="background-color: #ddd; border-bottom: 2px solid #ddd;">
@@ -561,11 +558,17 @@
   </div>
 </section>
 
+
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1">🔍 Other Findings</h1>
+  </div>
+</section>
+
 <section>        
   <div class="container">
     <div class="columns is-centered has-text-centered m-6">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">🔍 Other Findings</h2>
         <div class="content has-text-justified">
           <div id="analysis-carousel" class="carousel results-carousel">
             <div class="box m-5">
@@ -740,12 +743,17 @@
 </section>
 
 
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1">🔡 Case Studies</h1>
+  </div>
+</section>
+
 <!-- Case Studies -->
 <section>
   <div class="container">
     <div class="columns is-centered has-text-centered m-6">
       <div class="column is-four-fifths">
-        <h2 class="title is-3" id="case-study">🔍 Case Studies</h2>
         <div class="content has-text-justified">
           <div id="case-carousel" class="carousel results-carousel">
             <div class="box m-5" style="height: 100%; display: flex; justify-content: center; align-items: center; text-align: center;">
